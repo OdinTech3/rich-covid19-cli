@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "rich-covid19-cli"
+version = "0.1.0"
+description = "A rich covid19 dashboard cli"
+authors = ["\"Nick Muoh\" <\"nickspirit3+github@gmail.com\">"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+rich = "^1.0.3"
+typer = "^0.2.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+
+
