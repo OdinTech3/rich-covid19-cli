@@ -21,8 +21,25 @@ def find_bycode(code: str, countries: List[CountryDict]) -> Optional[CountryDict
 
 
 @cli.command()
-def run():
-    console.print(Panel("Hello, [red]World!"))
+def about():
+    MARKDOWN = """
+    # Rich Covid-19 Dashboard CLI
+
+    This is a CLI app that shows data on COVID19.
+    Data is sourced from *Johns Hopkins CSSE*
+
+    Core depenendecies of CLI are:
+
+    1. Rich
+    2. Typer
+    3. Requests
+
+    CLI consumes data from a ** REST ** API from [covid19api.com](https://covid19api.com/)
+
+    > built by [Kyle Redelinghuys](https://twitter.com/ksredelinghuys)
+    """
+
+    console.print(Markdown(MARKDOWN, hyperlinks=True))
 
 
 @cli.command()
@@ -74,9 +91,16 @@ def getcountry(
 
 @cli.command()
 def dayone(
-    country: str = typer.Option("", help="country name"),
+    country: str = typer.Argument(None),
     code: str = typer.Option("", help="ISO2 country code"),
 ):
+    """
+    Returns all cases by case type for a given [COUNTRY] from the first recorded case.
+
+    If --code is present then you can get all cases by case type
+    by providing the ISO2 country code
+    """
+
     with open(config.DATA_DIR / "country.json") as f:
         countries: List[CountryDict] = json.loads(f.read())
 
