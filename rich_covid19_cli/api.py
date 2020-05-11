@@ -10,6 +10,7 @@ def url(endpoint: str) -> str:
 def get_global_summary() -> GlobalSummary:
     resp = requests.get(url("summary"))
     payload: Dict = resp.json()
+
     return GlobalSummary.from_dict(payload.get("Global", {}))
 
 

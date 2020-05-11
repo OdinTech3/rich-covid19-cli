@@ -2,7 +2,6 @@ import typer
 import json
 from rich_covid19_cli import console, cli, api, cli_ui, config
 from rich_covid19_cli.models import CountryDict
-from rich import box
 from rich.panel import Panel
 from rich.markdown import Markdown
 from typing import List, Optional
@@ -34,7 +33,7 @@ def about():
     2. Typer
     3. Requests
 
-    CLI consumes data from a ** REST ** API from [covid19api.com](https://covid19api.com/)
+    CLI consumes data from a **REST** API from [covid19api.com](https://covid19api.com/)
 
     > built by [Kyle Redelinghuys](https://twitter.com/ksredelinghuys)
     """
@@ -43,7 +42,7 @@ def about():
 
 
 @cli.command()
-def summary(country: str):
+def summary(country: str = typer.Argument(None)):
     """
     A summary of new and total cases per country updated daily.
 
@@ -91,8 +90,7 @@ def getcountry(
 
 @cli.command()
 def dayone(
-    country: str = typer.Argument(None),
-    code: str = typer.Option("", help="ISO2 country code"),
+    country: str = typer.Argument(None), code: str = typer.Option("", help="ISO2 country code"),
 ):
     """
     Returns all cases by case type for a given [COUNTRY] from the first recorded case.
@@ -104,9 +102,7 @@ def dayone(
     with open(config.DATA_DIR / "country.json") as f:
         countries: List[CountryDict] = json.loads(f.read())
 
-    target_country = (
-        find_byname(country, countries) if country else find_bycode(code, countries)
-    )
+    target_country = find_byname(country, countries) if country else find_bycode(code, countries)
 
     if target_country:
         country_slug = target_country["Slug"]
