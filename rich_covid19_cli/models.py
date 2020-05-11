@@ -3,6 +3,7 @@ from dataclasses_json import dataclass_json, LetterCase, config
 from typing import Dict, TypeVar, Union
 from datetime import datetime
 from marshmallow import fields
+from typing import TypedDict
 
 # Create a generic variable that can be 'IDataClass', or any subclass.F
 D = TypeVar("D", bound="IDataClass")
@@ -13,6 +14,7 @@ def fromisoformat(datestr: str) -> datetime:
     new_datestr = datestr.replace('Z', '+00:00')
 
     return datetime.fromisoformat(new_datestr)
+
 
 class IDataClass:
     @staticmethod
@@ -32,6 +34,12 @@ class GlobalSummary(IDataClass):
     total_deaths: int
     new_recovered: int
     total_recovered: int
+
+
+class CountryDict(TypedDict):
+    Country: str
+    Slug: str
+    ISO2: str
 
 
 @dataclass_json(letter_case=LetterCase.PASCAL)
