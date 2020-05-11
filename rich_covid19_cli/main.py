@@ -36,7 +36,10 @@ def summary(country: str):
 
 
 @cli.command()
-def getcountry(country: str, code: str = typer.Option("", help="ISO2 country code")):
+def getcountry(
+    country: str = typer.Option("", help="country name"),
+    code: str = typer.Option("", help="ISO2 country code"),
+):
     """
     Get details like slug and ISO2 country code of a given [COUNTRY]
 
