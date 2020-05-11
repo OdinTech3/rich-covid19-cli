@@ -11,7 +11,7 @@ SummaryModel = Union["GlobalSummary", "CountrySummary"]
 
 
 def fromisoformat(datestr: str) -> datetime:
-    new_datestr = datestr.replace('Z', '+00:00')
+    new_datestr = datestr.replace("Z", "+00:00")
 
     return datetime.fromisoformat(new_datestr)
 
