@@ -9,6 +9,11 @@ D = TypeVar("D", bound="IDataClass")
 SummaryModel = Union["GlobalSummary", "CountrySummary"]
 
 
+def fromisoformat(datestr: str) -> datetime:
+    new_datestr = datestr.replace('Z', '+00:00')
+
+    return datetime.fromisoformat(new_datestr)
+
 class IDataClass:
     @staticmethod
     def from_dict(d: Dict) -> D:
@@ -44,7 +49,7 @@ class CountrySummary(IDataClass):
     date: datetime = field(
         metadata=config(
             encoder=datetime.isoformat,
-            decoder=datetime.fromisoformat,
+            decoder=fromisoformat,
             mm_field=fields.DateTime(format="iso"),
         )
     )
