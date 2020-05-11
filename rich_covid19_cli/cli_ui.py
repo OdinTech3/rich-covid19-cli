@@ -148,14 +148,13 @@ def _dayone(data: List[DayOneStats]):
         get_deltas("active"),
     )
 
-
     with Progress(*prog_tmpl) as progress:
         date_task = progress.add_task(
             "Date", total=len(stats_sorted) + 1, stat_dates=stat_dates
         )
 
         confirmed_task = progress.add_task(
-            "[white]Confirmed Cases...", total=latest_stats.confirmed,
+            "[blue on white]Confirmed Cases...", total=latest_stats.confirmed,
         )
         death_task = progress.add_task("[red]Deaths...", total=latest_stats.deaths)
         recovered_task = progress.add_task(
