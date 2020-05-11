@@ -1,5 +1,5 @@
 import requests
-from rich_covid19_cli.models import GlobalSummary, CountrySummary
+from rich_covid19_cli.models import GlobalSummary, CountrySummary, DayOneStats
 from typing import Dict, List
 
 
@@ -18,8 +18,14 @@ def get_country_summary(country: str) -> CountrySummary:
     payload: Dict = resp.json()
     countries: List[Dict] = payload.get("Countries", {})
 
-    target_country = [
-        c for c in countries if c["Country"].lower() == country.lower()
-    ]
+    target_country = [c for c in countries if c["Country"].lower() == country.lower()]
 
     return CountrySummary.from_dict(target_country[0])
+
+
+def get_dayone_stats(slug: str) -> List[DayOneStats]:
+    resp = requests.get(url(f"/dayone/country/{slug}"))
+    payload: str = resp.text
+    stats: List[DayOneStats] = DayOneStats.schema().loads(payload, many=True)
+
+    return stats

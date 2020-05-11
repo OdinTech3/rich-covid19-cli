@@ -8,6 +8,16 @@ from rich.markdown import Markdown
 from typing import List, Optional
 
 
+def find_byname(name: str, countries: List[CountryDict]) -> Optional[CountryDict]:
+    target_country = [c for c in countries if c["Country"].lower() == name.lower()]
+
+    return target_country[0] if target_country else None
+
+
+def find_bycode(code: str, countries: List[CountryDict]) -> Optional[CountryDict]:
+    target_country = [c for c in countries if c["ISO2"].lower() == code.lower()]
+
+    return target_country[0] if target_country else None
 
 
 @cli.command()
@@ -47,16 +57,6 @@ def getcountry(
     by providing the ISO2 country code
     """
 
-    def find_byname(name: str, countries: List[CountryDict]) -> Optional[CountryDict]:
-        target_country = [c for c in countries if c["Country"].lower() == name.lower()]
-
-        return target_country[0] if target_country else None
-
-    def find_bycode(code: str, countries: List[CountryDict]) -> Optional[CountryDict]:
-        target_country = [c for c in countries if c["ISO2"].lower() == code.lower()]
-
-        return target_country[0] if target_country else None
-
     with open(config.DATA_DIR / "country.json") as f:
         countries: List[CountryDict] = json.loads(f.read())
 
@@ -70,6 +70,28 @@ def getcountry(
         else:
             console.print(f"Unable to get country code for [code]{country}[/code]")
             typer.Exit(code=1)
+
+
+@cli.command()
+def dayone(
+    country: str = typer.Option("", help="country name"),
+    code: str = typer.Option("", help="ISO2 country code"),
+):
+    with open(config.DATA_DIR / "country.json") as f:
+        countries: List[CountryDict] = json.loads(f.read())
+
+    target_country = (
+        find_byname(country, countries) if country else find_bycode(code, countries)
+    )
+
+    if target_country:
+        country_slug = target_country["Slug"]
+        country_stats = api.get_dayone_stats(country_slug)
+
+        cli_ui.gen_summary(country_stats)
+    else:
+        console.print(f"Unable to get country code for [code]{country}[/code]")
+        typer.Exit(code=1)
 
 
 if __name__ == "__main__":
