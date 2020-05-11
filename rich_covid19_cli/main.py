@@ -1,6 +1,16 @@
 import typer
-from rich_covid19_cli import console, cli, api, cli_ui
+import json
+from rich_covid19_cli import console, cli, api, cli_ui, config
+from rich import box
 from rich.panel import Panel
+from rich.markdown import Markdown
+from typing import List, TypedDict
+
+
+class Country(TypedDict):
+    Country: str
+    Slug: str
+    ISO2: str
 
 
 @cli.command()
@@ -20,6 +30,27 @@ def summary(country: str = typer.Argument(None)):
 
         for table in cli_ui.gen_summary(g_summary):
             console.print(table)
+
+
+@cli.command()
+def getcode(country: str):
+    """
+    Get the code of a given [COUNTRY]
+    """
+
+    with open(config.DATA_DIR / "country.json") as f:
+        countries: List[Country] = json.loads(f.read())
+
+        target_country = [
+            c for c in countries if c["Country"].lower() == country.lower()
+        ]
+
+        if target_country:
+            pretty_json = json.dumps(target_country[0], indent=4)
+            console.print(Panel(pretty_json))
+        else:
+            console.print(f"Unable to get country code for [code]{country}[/code]")
+            typer.Exit(code=1)
 
 
 if __name__ == "__main__":
