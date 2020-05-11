@@ -18,9 +18,8 @@ def summary(country: str = typer.Argument(None)):
     if country is None:
         g_summary = api.get_global_summary()
 
-        table = cli_ui.gen_summary(g_summary)
-
-        console.print(table)
+        for table in cli_ui.gen_summary(g_summary):
+            console.print(table)
 
 
 if __name__ == "__main__":
